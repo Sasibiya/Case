@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="./src/index.css">
+    <script type="text/javascript" src="./lib/vue.js"></script>
+    <script type="text/javascript" src="lib/vue-router.js"></script>
+    
+</head>
+
+<body>
+    <div id="app" class="theone"> 
+    	<router-view> </router-view>		    
+	</div>
+	
+	<template id="tmp1">
+		<div class="dv1">
+	    <!-- 上侧区域 -->
+		    <header class="header">后台管理
+			    <!-- 注册 -->
+			    <div class="register"><router-link to="register">注册</router-link></div>
+			    <!-- 登陆 -->
+			    <div class="login"><router-link to="/login">登陆</router-link></div>
+			</header>
+		    <!-- 中部区域 -->
+			    <div class="middle">
+			        <!-- 中部左侧 -->
+			        <div class="middle-left">
+			            <li><router-link to="/users">用户管理</router-link></li>
+			            <li><router-link to="/rights">权限管理</router-link></li>
+			            <li><router-link to="/goods">产品管理</router-link></li>
+			            <li><router-link to="/orders">订单管理</router-link></li>
+			            <li><router-link to="/settings">系统设置管理</router-link></li>
+			            <li><router-link to="/accounts">账户管理</router-link></li>			       
+			        </div>
+			        <!-- 中部右侧 -->
+			        <div class="middle-right">
+			        	<router-view></router-view>		       
+			        </div>
+			    </div>
+		    	<!-- 底部区域 -->
+		    <div class="footer">版权信息</div>
+	    </div>
+	</template>
+	
+	<template id="users">
+		<div class="users-dv">
+			<h3>用户管理区域</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>编号</th>
+						<th>姓名</th>
+						<th>年龄</th>
+						<th>操作</th>
+					</tr>					
+				</thead>
+				<tbody>
+					<tr v-for="item in userlist" :key="item.id">
+						<td>{{item.id}}</td>
+						<td>{{item.name}}</td>
+						<td>{{item.age}}</td>
+						<td>
+							<a href="javascript:;" @click="goDetil(item.id)">详情</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</template>
+
+	<template id="login">
+		<div class="bd">
+			<div class="loginBox">
+				<h2>Login</h2>
+			 	<form action="">
+			      <div class="item">
+			        <input type="text" required>
+			        <label for="">UserName</label>
+			      </div>
+			      <div class="item">
+			        <input type="password" required>
+			        <label for="">PassWord</label>
+			      </div>
+			      <button class="btn">submit
+			        <span></span>
+			        <span></span>
+			        <span></span>
+			        <span></span>
+			      </button>
+			    </form>
+			</div>
+		</div>
+	</template>
+	<template id="register">
+		<div>
+			<h3>注册</h3>
+		</div>
+	</template>
+	
+	<template id="userinfo">
+		<div>
+			<h5>用户{{id}}详情页面</h5>
+			<button @click="goback()">返回</button>
+		</div>
+	</template>
+
+	<template id="rights">
+		<div>
+			<h3>权限管理区域</h3>
+		</div>
+	</template>
+
+	<template id="goods">
+		<div>
+			<h3>产品管理区域</h3>
+		</div>
+	</template>
+
+	<template id="orders">
+		<div>
+			<h3>订单管理区域</h3>
+		</div>
+	</template>
+
+	<template id="settings">
+		<div>
+			<h3>系统设置管理</h3>
+		</div>
+	</template>
+
+	<template id="accounts">
+		<div>
+			<h3>账户管理区域</h3>
+		</div>
+	</template>
+
+  	<script type="text/javascript">
+
+	const App = {
+		template:'#tmp1'
+
+	}
+
+	const Login = {
+		template:'#login'
+	}
+
+	const Register = {
+		template:'#register'
+	}
+
+	const Users = {
+		data(){
+			return{
+				userlist:[
+					{id:1,name:'张张',age:22},
+					{id:2,name:'张张',age:22},
+					{id:3,name:'张张',age:22},
+					{id:4,name:'张张',age:22},
+					{id:5,name:'张张',age:22}
+				]
+			}
+		},
+		methods:{
+			goDetil(id){
+				console.log(id)
+				this.$router.push('/userinfo/' + id)
+			}
+		},
+		template:'#users'
+	}
+
+	const UserInfo = {
+		props:[
+			'id'
+		],
+		methods:{
+			goback(){
+				//后退
+				this.$router.go(-1)
+			}
+		},
+		template:'#userinfo'
+	}	
+
+	const Rights = {
+		template:'#rights'
+	}
+
+	const Goods = {
+		template:'#goods'
+	}
+
+	const Orders = {
+		template:'#orders'
+	}
+
+	const Settings = {
+		template:'#settings'
+	}
+
+	const Accounts = {
+		template:'#accounts'
+	}
+
+	//创建路由对象
+	const router = new VueRouter({
+		routes:[
+			{
+				path:'/',
+				component:App,
+				children:[
+					{path:'/users',component:Users},
+					{path:'/userinfo/:id',component:UserInfo,props: true},
+
+					{path:'/login',component:Login},
+					{path:'/register',component:Register},				
+					{path:'/rights',component:Rights},
+					{path:'/goods',component:Goods},
+					{path:'/orders',component:Orders},
+					{path:'/settings',component:Settings},
+					{path:'/accounts',component:Accounts}
+				]
+			}
+		]
+	})
+
+    var vm = new Vue({
+        el: "#app",
+        data: {},
+        methods: {},
+        router
+        
+    })
+    </script> 
+</body> 
+</html>
